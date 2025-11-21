@@ -19,7 +19,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (item: FoodItem) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+      const existingItem = prevCart.find(cartItem => cartItem._id === item._id);
       
       if (existingItem) {
         toast({
@@ -27,7 +27,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           description: `${item.name} quantity increased`,
         });
         return prevCart.map(cartItem =>
-          cartItem.id === item.id
+          cartItem._id === item._id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -43,7 +43,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromCart = (itemId: string) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== itemId));
+    setCart(prevCart => prevCart.filter(item => item._id !== itemId));
     toast({
       title: "Removed from cart",
       description: "Item has been removed from your cart",
@@ -58,7 +58,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     
     setCart(prevCart =>
       prevCart.map(item =>
-        item.id === itemId ? { ...item, quantity } : item
+        item._id === itemId ? { ...item, quantity } : item
       )
     );
   };

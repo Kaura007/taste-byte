@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { CreditCard, MapPin, User } from 'lucide-react';
+import axios from 'axios';
 
 const Checkout = () => {
   const { cart, getTotalPrice, clearCart } = useCart();
@@ -32,11 +33,11 @@ const Checkout = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
+
+    // BASIC VALIDATION
     const requiredFields = Object.entries(formData);
     const emptyField = requiredFields.find(([_, value]) => !value.trim());
-    
+
     if (emptyField) {
       toast({
         title: "Incomplete form",
@@ -47,17 +48,42 @@ const Checkout = () => {
     }
 
     setIsProcessing(true);
-    
-    // Simulate payment processing
+
+    try {
+      // ----------------------------------------------------
+      // 🔥 TRAINING API — Learn Combo Embeddings
+      // ----------------------------------------------------
+      const itemIds = cart.map(item => item._id); // IMPORTANT
+      console.log("Training combo with:", itemIds);
+
+      await axios.post("http://localhost:5000/api/order/train", {
+        items: itemIds,
+      });
+
+      console.log("Training API hit successfully!");
+
+    } catch (err) {
+      console.error("Training API error:", err);
+      toast({
+        title: "AI training failed",
+        description: "Order placed, but combo learning couldn't update.",
+        variant: "destructive",
+      });
+    }
+
+    // ----------------------------------------------------
+    // 🔥 SIMULATE PAYMENT SUCCESS
+    // ----------------------------------------------------
     setTimeout(() => {
       setIsProcessing(false);
+
       clearCart();
-      
+
       toast({
         title: "Order placed successfully!",
         description: `Your order of $${(getTotalPrice() * 1.1).toFixed(2)} has been confirmed`,
       });
-      
+
       navigate('/');
     }, 2000);
   };
@@ -72,11 +98,14 @@ const Checkout = () => {
   return (
     <div className="container py-12">
       <h1 className="text-4xl font-bold mb-8">Checkout</h1>
-      
+
       <div className="grid lg:grid-cols-3 gap-8">
+        
+        {/* LEFT SIDE FORM */}
         <div className="lg:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Personal Information */}
+
+            {/* Personal Info */}
             <Card className="border-border/50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -84,6 +113,7 @@ const Checkout = () => {
                   Personal Information
                 </CardTitle>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -96,6 +126,7 @@ const Checkout = () => {
                       placeholder="John Doe"
                     />
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -108,6 +139,7 @@ const Checkout = () => {
                     />
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
                   <Input
@@ -130,6 +162,7 @@ const Checkout = () => {
                   Delivery Address
                 </CardTitle>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="address">Street Address</Label>
@@ -141,6 +174,7 @@ const Checkout = () => {
                     placeholder="123 Main St"
                   />
                 </div>
+
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="city">City</Label>
@@ -152,6 +186,7 @@ const Checkout = () => {
                       placeholder="New York"
                     />
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="zipCode">ZIP Code</Label>
                     <Input
@@ -166,7 +201,7 @@ const Checkout = () => {
               </CardContent>
             </Card>
 
-            {/* Payment Information */}
+            {/* Payment Info */}
             <Card className="border-border/50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -177,6 +212,7 @@ const Checkout = () => {
                   This is a demo payment gateway - no real charges will be made
                 </CardDescription>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="cardNumber">Card Number</Label>
@@ -189,6 +225,7 @@ const Checkout = () => {
                     maxLength={19}
                   />
                 </div>
+
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="cardExpiry">Expiry Date</Label>
@@ -201,6 +238,7 @@ const Checkout = () => {
                       maxLength={5}
                     />
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="cardCvv">CVV</Label>
                     <Input
@@ -217,6 +255,7 @@ const Checkout = () => {
               </CardContent>
             </Card>
 
+            {/* Submit Button */}
             <Button 
               type="submit" 
               size="lg" 
@@ -225,19 +264,21 @@ const Checkout = () => {
             >
               {isProcessing ? 'Processing...' : `Place Order - $${totalAmount}`}
             </Button>
+
           </form>
         </div>
 
-        {/* Order Summary */}
+        {/* ORDER SUMMARY */}
         <div className="lg:col-span-1">
           <Card className="border-border/50 sticky top-24">
             <CardHeader>
               <CardTitle>Order Summary</CardTitle>
             </CardHeader>
+
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 {cart.map(item => (
-                  <div key={item.id} className="flex justify-between text-sm">
+                  <div key={item._id} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
                       {item.name} × {item.quantity}
                     </span>
@@ -245,24 +286,28 @@ const Checkout = () => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="border-t border-border pt-4 space-y-2">
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Subtotal</span>
                   <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
+
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Tax (10%)</span>
                   <span>${(getTotalPrice() * 0.1).toFixed(2)}</span>
                 </div>
+
                 <div className="flex justify-between text-xl font-bold pt-2">
                   <span>Total</span>
                   <span className="text-primary">${totalAmount}</span>
                 </div>
               </div>
+
             </CardContent>
           </Card>
         </div>
+
       </div>
     </div>
   );

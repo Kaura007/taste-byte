@@ -32,11 +32,11 @@ const Cart = () => {
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {cart.map(item => (
-            <Card key={item.id} className="border-border/50">
+            <Card key={item._id} className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex gap-4">
                   <img
-                    src={item.image}
+                    src={"/assets/"+item.image}
                     alt={item.name}
                     className="w-24 h-24 object-cover rounded-lg"
                   />
@@ -52,7 +52,7 @@ const Cart = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item._id)}
                         className="text-destructive hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -64,7 +64,7 @@ const Cart = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           className="h-8 w-8"
                         >
                           <Minus className="h-3 w-3" />
@@ -75,7 +75,7 @@ const Cart = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item._id, item.quantity + 1)}
                           className="h-8 w-8"
                         >
                           <Plus className="h-3 w-3" />

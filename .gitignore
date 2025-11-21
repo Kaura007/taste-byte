@@ -1,2 +1,5 @@
 .env
 node_modules
+python_backend/venv
+python_backend/__pycache__
+.gitignore
