@@ -26,7 +26,7 @@ const RecommendationBar = ({ title, items }) => {
             <CardContent className="p-3 space-y-1">
               <p className="font-medium text-sm line-clamp-1">{item.name}</p>
               <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
-              <p className="text-primary font-bold text-sm mt-1">₹{item.price}</p>
+              <p className="text-primary font-bold text-sm mt-1">${item.price}</p>
 
               <Button
                 className="w-full h-8 mt-2 text-xs bg-primary hover:bg-primary/90"
