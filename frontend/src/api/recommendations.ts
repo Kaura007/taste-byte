@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 export const getComboRecommendations = async (itemId: string) => {
-const res = await axios.get(`http://localhost:5000/api/order/recommend?itemId=${itemId}`);
+const res = await axios.get(`http://localhost:5000/api/food/recommend?itemId=${itemId}`);
 return res.data.recommendedItems || [];
 };
 
