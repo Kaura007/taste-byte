@@ -11,9 +11,5 @@
             "src": "/(.*)",
             "dest": "app.js"
         }
-    ],
-    "env": {
-        "MONGO_URI": "production_mongo_uri_placeholder",
-        "PYTHON_API_URL": "production_python_api_url_placeholder"
-    }
+    ]
 }
