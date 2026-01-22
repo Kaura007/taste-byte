@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { CreditCard, MapPin, User } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '@/config';
 
 const Checkout = () => {
   const { cart, getTotalPrice, clearCart } = useCart();
@@ -56,7 +57,9 @@ const Checkout = () => {
       const itemIds = cart.map(item => item._id); // IMPORTANT
       console.log("Training combo with:", itemIds);
 
-      await axios.post("http://localhost:5000/api/order/train", {
+      console.log("Training combo with:", itemIds);
+
+      await axios.post(`${API_BASE_URL}/api/order/train`, {
         items: itemIds,
       });
 
@@ -100,7 +103,7 @@ const Checkout = () => {
       <h1 className="text-4xl font-bold mb-8">Checkout</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        
+
         {/* LEFT SIDE FORM */}
         <div className="lg:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -256,9 +259,9 @@ const Checkout = () => {
             </Card>
 
             {/* Submit Button */}
-            <Button 
-              type="submit" 
-              size="lg" 
+            <Button
+              type="submit"
+              size="lg"
               className="w-full bg-primary hover:bg-primary/90"
               disabled={isProcessing}
             >

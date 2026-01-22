@@ -1,7 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
 import FoodCard from '@/components/FoodCard';
 import SearchBar from '@/components/SearchBar';
+
 import heroImage from '/assets/hero-restaurant.jpg';
+import { API_BASE_URL } from '@/config';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     async function fetchItems() {
       try {
-        const res = await fetch("http://localhost:5000/api/food/all");
+        const res = await fetch(`${API_BASE_URL}/api/food/all`);
         const data = await res.json();
         if (data.success) setItems(data.items);
       } catch (err) {
@@ -34,7 +36,7 @@ const Home = () => {
 
       try {
         const res = await fetch(
-          `http://localhost:5000/api/food/search?q=${encodeURIComponent(searchQuery)}`
+          `${API_BASE_URL}/api/food/search?q=${encodeURIComponent(searchQuery)}`
         );
         const data = await res.json();
         if (data.success) {
